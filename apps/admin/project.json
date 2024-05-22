@@ -2,22 +2,25 @@
   "name": "admin",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "prefix": "app",
+  "prefix": "ng-mf",
   "sourceRoot": "apps/admin/src",
   "tags": [],
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:browser",
+      "executor": "@nx/angular:webpack-browser",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/admin/browser",
+        "outputPath": "dist/apps/admin",
         "index": "apps/admin/src/index.html",
         "main": "apps/admin/src/main.ts",
         "polyfills": ["zone.js"],
         "tsConfig": "apps/admin/tsconfig.app.json",
         "assets": ["apps/admin/src/favicon.ico", "apps/admin/src/assets"],
         "styles": ["apps/admin/src/styles.css"],
-        "scripts": []
+        "scripts": [],
+        "customWebpackConfig": {
+          "path": "apps/admin/webpack.config.ts"
+        }
       },
       "configurations": {
         "production": {
@@ -33,7 +36,10 @@
               "maximumError": "4kb"
             }
           ],
-          "outputHashing": "all"
+          "outputHashing": "all",
+          "customWebpackConfig": {
+            "path": "apps/admin/webpack.prod.config.ts"
+          }
         },
         "development": {
           "buildOptimizer": false,
@@ -47,7 +53,11 @@
       "defaultConfiguration": "production"
     },
     "serve": {
-      "executor": "@angular-devkit/build-angular:dev-server",
+      "executor": "@nx/angular:module-federation-dev-server",
+      "options": {
+        "port": 4200,
+        "publicHost": "http://localhost:4200"
+      },
       "configurations": {
         "production": {
           "buildTarget": "admin:build:production"
@@ -73,59 +83,6 @@
       "options": {
         "jestConfig": "apps/admin/jest.config.ts"
       }
-    },
-    "server": {
-      "dependsOn": ["build"],
-      "executor": "@angular-devkit/build-angular:server",
-      "options": {
-        "outputPath": "dist/apps/admin/server",
-        "main": "apps/admin/server.ts",
-        "tsConfig": "apps/admin/tsconfig.server.json"
-      },
-      "configurations": {
-        "production": {
-          "outputHashing": "media"
-        },
-        "development": {
-          "buildOptimizer": false,
-          "optimization": false,
-          "sourceMap": true,
-          "extractLicenses": false,
-          "vendorChunk": true
-        }
-      },
-      "defaultConfiguration": "production"
-    },
-    "serve-ssr": {
-      "executor": "@angular-devkit/build-angular:ssr-dev-server",
-      "configurations": {
-        "development": {
-          "browserTarget": "admin:build:development",
-          "serverTarget": "admin:server:development"
-        },
-        "production": {
-          "browserTarget": "admin:build:production",
-          "serverTarget": "admin:server:production"
-        }
-      },
-      "defaultConfiguration": "development"
-    },
-    "prerender": {
-      "executor": "@angular-devkit/build-angular:prerender",
-      "options": {
-        "routes": ["/"]
-      },
-      "configurations": {
-        "development": {
-          "browserTarget": "admin:build:development",
-          "serverTarget": "admin:server:development"
-        },
-        "production": {
-          "browserTarget": "admin:build:production",
-          "serverTarget": "admin:server:production"
-        }
-      },
-      "defaultConfiguration": "production"
     }
   }
 }
