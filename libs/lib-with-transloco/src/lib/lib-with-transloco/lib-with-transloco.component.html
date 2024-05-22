@@ -1,1 +1,7 @@
-<p>lib-with-transloco works!</p>
+<div>
+  transloco library
+</div>
+
+<ng-container *transloco="let t; scope: 'libScope'">
+  {{ t('libScope.helloWorld') }}
+</ng-container>

@@ -2,13 +2,20 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '@ng-mf/data-access-user';
+import { TranslocoDirective } from '@ngneat/transloco';
+import { LibWithTranslocoComponent } from '@ng-mf/lib-with-transloco';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslocoDirective, LibWithTranslocoComponent],
   selector: 'ng-mf-login-entry',
   template: `
     <div class="login-app">
+      <lib-lib-with-transloco/>
+      <ng-container *transloco="let t;scope: 'loginScope'">
+        <p>{{ t('loginScope.login') }}</p>
+      </ng-container>
+
       <form class="login-form" (ngSubmit)="login()">
         <label>
           Username:
